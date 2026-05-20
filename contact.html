@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Form</title>
+  <style>
+    :root {
+      --bg: #eef8f3;
+      --card: #ffffff;
+      --text: #0f2a1f;
+      --muted: #658175;
+      --primary: #10b981;
+      --primary-dark: #047857;
+      --border: #d7ebe2;
+      --error: #ef4444;
+      --success: #059669;
+      --shadow: 0 24px 70px rgba(15, 42, 31, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(16, 185, 129, 0.18), transparent 32%),
+        linear-gradient(135deg, #f7fffb 0%, var(--bg) 100%);
+      color: var(--text);
+      display: grid;
+      place-items: center;
+      padding: 28px;
+    }
+
+    .contact-wrapper {
+      width: min(1080px, 100%);
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .info-panel,
+    .form-card {
+      border: 1px solid rgba(215, 235, 226, 0.9);
+      background: rgba(255, 255, 255, 0.78);
+      backdrop-filter: blur(18px);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .info-panel {
+      padding: 44px;
+      position: relative;
+      background:
+        linear-gradient(145deg, rgba(16, 185, 129, 0.13), rgba(255, 255, 255, 0.82)),
+        var(--card);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      color: var(--primary-dark);
+      background: rgba(16, 185, 129, 0.12);
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    .badge span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--primary);
+      box-shadow: 0 0 0 6px rgba(16, 185, 129, 0.14);
+    }
+
+    h1 {
+      font-size: clamp(36px, 5vw, 58px);
+      line-height: 1.03;
+      letter-spacing: -0.055em;
+      margin-bottom: 18px;
+    }
+
+    h1 strong {
+      color: var(--primary);
+      display: block;
+    }
+
+    .info-panel p {
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.7;
+      max-width: 440px;
+      margin-bottom: 34px;
+    }
+
+    .highlight-list {
+      display: grid;
+      gap: 16px;
+      list-style: none;
+    }
+
+    .highlight-list li {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: #315347;
+      font-weight: 650;
+    }
+
+    .icon {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: #fff;
+      color: var(--primary-dark);
+      box-shadow: 0 10px 25px rgba(15, 42, 31, 0.09);
+      flex: 0 0 auto;
+    }
+
+    .form-card {
+      padding: 36px;
+      background: rgba(255, 255, 255, 0.92);
+    }
+
+    .form-title {
+      margin-bottom: 26px;
+    }
+
+    .form-title h2 {
+      font-size: 30px;
+      letter-spacing: -0.035em;
+      margin-bottom: 8px;
+    }
+
+    .form-title p {
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    form {
+      display: grid;
+      gap: 18px;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    label {
+      font-size: 14px;
+      color: #315347;
+      font-weight: 750;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 15px 16px;
+      color: var(--text);
+      background: #fbfffd;
+      font: inherit;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+    }
+
+    textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 5px rgba(16, 185, 129, 0.13);
+    }
+
+    .error-message {
+      min-height: 18px;
+      color: var(--error);
+      font-size: 13px;
+      font-weight: 650;
+    }
+
+    .field.invalid input,
+    .field.invalid select,
+    .field.invalid textarea {
+      border-color: var(--error);
+      box-shadow: 0 0 0 5px rgba(239, 68, 68, 0.1);
+    }
+
+    .consent {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+      cursor: pointer;
+    }
+
+    .consent input {
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      accent-color: var(--primary);
+      flex: 0 0 auto;
+    }
+
+    button {
+      border: 0;
+      border-radius: 18px;
+      padding: 16px 22px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary) 0%, #0f766e 100%);
+      font: inherit;
+      font-weight: 850;
+      cursor: pointer;
+      box-shadow: 0 14px 28px rgba(16, 185, 129, 0.28);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 34px rgba(16, 185, 129, 0.34);
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.7;
+      transform: none;
+    }
+
+    .status {
+      display: none;
+      padding: 14px 16px;
+      border-radius: 16px;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .status.success {
+      display: block;
+      color: var(--success);
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.24);
+    }
+
+    .status.error {
+      display: block;
+      color: var(--error);
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.22);
+    }
+
+    @media (max-width: 860px) {
+      .contact-wrapper {
+        grid-template-columns: 1fr;
+      }
+
+      .info-panel,
+      .form-card {
+        border-radius: 24px;
+        padding: 28px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      body {
+        padding: 16px;
+      }
+
+      .field-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .info-panel,
+      .form-card {
+        padding: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="contact-wrapper">
+    <section class="info-panel" aria-labelledby="contact-heading">
+      <div class="badge"><span></span> We are here to help</div>
+      <h1 id="contact-heading">Get in <strong>touch with us</strong></h1>
+      <p>
+        Fill out the form for questions, collaboration requests, feedback, or support.
+        Our team will review your message and get back to you as soon as possible.
+      </p>
+
+      <ul class="highlight-list">
+        <li>
+          <span class="icon" aria-hidden="true">✓</span>
+          Simple and clean contact experience
+        </li>
+        <li>
+          <span class="icon" aria-hidden="true">★</span>
+          Suitable for product, support, and business requests
+        </li>
+        <li>
+          <span class="icon" aria-hidden="true">↗</span>
+          Easy to connect with your backend or API
+        </li>
+      </ul>
+    </section>
+
+    <section class="form-card" aria-labelledby="form-heading">
+      <div class="form-title">
+        <h2 id="form-heading">Send a message</h2>
+        <p>Fill in the fields below. The form is validated in the browser.</p>
+      </div>
+
+      <form id="contactForm" novalidate>
+        <div class="field-grid">
+          <div class="field">
+            <label for="name">Full Name</label>
+            <input id="name" name="name" type="text" placeholder="John Smith" autocomplete="name" />
+            <small class="error-message"></small>
+          </div>
+
+          <div class="field">
+            <label for="subject">Subject</label>
+            <select id="subject" name="subject">
+              <option value="">Select a subject</option>
+              <option value="support">Support</option>
+              <option value="collaboration">Collaboration</option>
+              <option value="sales">Sales</option>
+              <option value="feedback">Feedback</option>
+              <option value="other">Other</option>
+            </select>
+            <small class="error-message"></small>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" placeholder="Write your message..."></textarea>
+          <small class="error-message"></small>
+        </div>
+
+        <label class="consent">
+          <input id="consent" name="consent" type="checkbox" />
+          <span>I agree that my message may be processed for contact purposes.</span>
+        </label>
+
+        <div id="status" class="status" role="status" aria-live="polite"></div>
+
+        <button id="submitBtn" type="submit">Send Message</button>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    const form = document.querySelector("#contactForm");
+    const statusBox = document.querySelector("#status");
+    const submitBtn = document.querySelector("#submitBtn");
+
+    const fields = {
+      name: document.querySelector("#name"),
+      subject: document.querySelector("#subject"),
+      message: document.querySelector("#message"),
+      consent: document.querySelector("#consent")
+    };
+
+    const validators = {
+      name(value) {
+        if (value.trim().length < 3) return "Full name must be at least 3 characters.";
+        return "";
+      },
+      subject(value) {
+        if (!value) return "Please select a subject.";
+        return "";
+      },
+      message(value) {
+        if (value.trim().length < 10) return "Message must be at least 10 characters.";
+        return "";
+      }
+    };
+
+    function setError(input, message) {
+      const field = input.closest(".field");
+      const error = field?.querySelector(".error-message");
+
+      if (!field || !error) return;
+
+      field.classList.toggle("invalid", Boolean(message));
+      error.textContent = message;
+    }
+
+    function validateField(name) {
+      const input = fields[name];
+      const validator = validators[name];
+      if (!input || !validator) return true;
+
+      const error = validator(input.value);
+      setError(input, error);
+      return !error;
+    }
+
+    function validateForm() {
+      const validFields = Object.keys(validators).map(validateField);
+      const consentValid = fields.consent.checked;
+
+      if (!consentValid) {
+        showStatus("Please accept the consent checkbox before sending.", "error");
+      }
+
+      return validFields.every(Boolean) && consentValid;
+    }
+
+    function showStatus(message, type) {
+      statusBox.textContent = message;
+      statusBox.className = `status ${type}`;
+    }
+
+    Object.keys(validators).forEach((name) => {
+      fields[name].addEventListener("input", () => validateField(name));
+      fields[name].addEventListener("blur", () => validateField(name));
+    });
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      statusBox.className = "status";
+
+      if (!validateForm()) return;
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Sending...";
+
+      const formData = {
+        name: fields.name.value.trim(),
+        subject: fields.subject.value,
+        message: fields.message.value.trim()
+      };
+
+      await new Promise((resolve) => setTimeout(resolve, 900));
+
+      console.log("Form data:", formData);
+      showStatus("Your message has been prepared successfully. Connect a backend endpoint to send it for real.", "success");
+
+      form.reset();
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Send Message";
+    });
+  </script>
+</body>
+</html>
