@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="DM For WhatsApp lets you send WhatsApp messages to any phone number without saving it to your contacts first." />
+  <title>DM For WhatsApp</title>
+  <style>
+    :root {
+      --bg: #eef8f3;
+      --surface: #ffffff;
+      --surface-soft: #f7fffb;
+      --text: #0b2a1f;
+      --muted: #5f7f72;
+      --primary: #10b981;
+      --primary-dark: #047857;
+      --secondary: #0f766e;
+      --border: #d7ebe2;
+      --shadow: 0 22px 70px rgba(15, 42, 31, 0.13);
+      --radius-xl: 32px;
+      --radius-lg: 24px;
+      --radius-md: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(16, 185, 129, 0.18), transparent 32%),
+        radial-gradient(circle at 88% 8%, rgba(15, 118, 110, 0.13), transparent 30%),
+        linear-gradient(135deg, #fbfffd 0%, var(--bg) 100%);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(18px);
+      background: rgba(247, 255, 251, 0.78);
+      border-bottom: 1px solid rgba(215, 235, 226, 0.7);
+    }
+
+    .nav-inner {
+      height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      font-size: 20px;
+    }
+
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      box-shadow: 0 12px 24px rgba(16, 185, 129, 0.28);
+      font-size: 21px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      color: #35594b;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary-dark);
+    }
+
+    .nav-cta,
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 0;
+      border-radius: 999px;
+      padding: 13px 19px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      font-weight: 850;
+      box-shadow: 0 14px 28px rgba(16, 185, 129, 0.28);
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .nav-cta:hover,
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 34px rgba(16, 185, 129, 0.34);
+    }
+
+    .menu-btn {
+      display: none;
+      width: 44px;
+      height: 44px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: #fff;
+      color: var(--text);
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+    .hero {
+      padding: 86px 0 58px;
+      overflow: hidden;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 46px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      margin-bottom: 22px;
+      color: var(--primary-dark);
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.18);
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 850;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--primary);
+      box-shadow: 0 0 0 6px rgba(16, 185, 129, 0.15);
+    }
+
+    h1 {
+      max-width: 720px;
+      font-size: clamp(44px, 7vw, 82px);
+      line-height: 0.98;
+      letter-spacing: -0.07em;
+      margin-bottom: 24px;
+    }
+
+    h1 span {
+      color: var(--primary);
+      display: block;
+    }
+
+    .hero-copy {
+      max-width: 650px;
+      color: var(--muted);
+      font-size: 19px;
+      margin-bottom: 30px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 34px;
+    }
+
+    .btn.secondary {
+      color: var(--primary-dark);
+      background: #fff;
+      border: 1px solid var(--border);
+      box-shadow: none;
+    }
+
+    .trust-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      color: #315347;
+      font-size: 14px;
+      font-weight: 750;
+    }
+
+    .trust-row span {
+      padding: 9px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.76);
+      border: 1px solid rgba(215, 235, 226, 0.9);
+    }
+
+    .phone-wrap {
+      position: relative;
+      min-height: 620px;
+      display: grid;
+      place-items: center;
+    }
+
+    .blob {
+      position: absolute;
+      width: 430px;
+      height: 430px;
+      border-radius: 48% 52% 47% 53%;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.28), rgba(15, 118, 110, 0.08));
+      filter: blur(2px);
+      transform: rotate(-16deg);
+    }
+
+    .phone {
+      position: relative;
+      width: min(360px, 78vw);
+      min-height: 690px;
+      padding: 15px;
+      border-radius: 46px;
+      background: linear-gradient(145deg, #111 0%, #3a3a3a 48%, #111 100%);
+      box-shadow: 0 42px 90px rgba(15, 42, 31, 0.28);
+      transform: rotate(3deg);
+    }
+
+    .phone-screen {
+      min-height: 660px;
+      border-radius: 34px;
+      overflow: hidden;
+      background: #f5fffa;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .dynamic-island {
+      width: 116px;
+      height: 34px;
+      border-radius: 999px;
+      background: #050505;
+      margin: 14px auto 8px;
+    }
+
+    .app-ui {
+      padding: 18px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .ui-label {
+      color: #315347;
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .ui-row {
+      display: grid;
+      grid-template-columns: 0.75fr 1.25fr;
+      gap: 10px;
+    }
+
+    .ui-input,
+    .ui-button,
+    .ui-message {
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 16px;
+      padding: 13px;
+      color: #234337;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .ui-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .ui-message {
+      height: 150px;
+      font-weight: 600;
+      color: #365d4e;
+    }
+
+    .ui-template {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--primary-dark);
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .ui-send {
+      margin-top: 8px;
+      padding: 17px;
+      border-radius: 17px;
+      text-align: center;
+      color: #fff;
+      font-weight: 900;
+      background: linear-gradient(135deg, #2bd970, #0f766e);
+      box-shadow: 0 15px 30px rgba(16, 185, 129, 0.24);
+    }
+
+    .tabbar {
+      margin-top: auto;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 4px;
+      padding: 12px 10px 16px;
+      border-top: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.82);
+    }
+
+    .tabbar span {
+      text-align: center;
+      color: #557669;
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .tabbar .active {
+      color: var(--primary-dark);
+      background: rgba(16, 185, 129, 0.12);
+      border-radius: 12px;
+      padding: 7px 2px;
+    }
+
+    section {
+      padding: 74px 0;
+    }
+
+    .section-head {
+      max-width: 720px;
+      margin-bottom: 32px;
+    }
+
+    .section-head.center {
+      margin-inline: auto;
+      text-align: center;
+    }
+
+    h2 {
+      font-size: clamp(32px, 5vw, 54px);
+      line-height: 1.06;
+      letter-spacing: -0.055em;
+      margin-bottom: 14px;
+    }
+
+    h2 span {
+      color: var(--primary);
+    }
+
+    .section-head p {
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .feature-card,
+    .privacy-card,
+    .use-card {
+      padding: 26px;
+      border: 1px solid rgba(215, 235, 226, 0.9);
+      background: rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(16px);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 16px 42px rgba(15, 42, 31, 0.07);
+    }
+
+    .feature-card .icon,
+    .use-card .icon {
+      margin-bottom: 18px;
+    }
+
+    .feature-card h3,
+    .privacy-card h3,
+    .use-card h3 {
+      font-size: 21px;
+      letter-spacing: -0.03em;
+      margin-bottom: 10px;
+    }
+
+    .feature-card p,
+    .privacy-card p,
+    .use-card p {
+      color: var(--muted);
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .template-demo {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 28px;
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    .template-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .template-item {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: var(--surface-soft);
+    }
+
+    .template-item strong {
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .template-item small {
+      color: var(--muted);
+      font-weight: 650;
+    }
+
+    .pill {
+      white-space: nowrap;
+      padding: 6px 10px;
+      border-radius: 999px;
+      color: var(--primary-dark);
+      background: rgba(16, 185, 129, 0.12);
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .privacy-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .privacy-card.featured {
+      grid-row: span 2;
+      background: linear-gradient(145deg, rgba(16, 185, 129, 0.16), rgba(255, 255, 255, 0.94));
+    }
+
+    .use-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .cta {
+      padding: 72px 0 92px;
+    }
+
+    .cta-box {
+      position: relative;
+      overflow: hidden;
+      padding: 58px;
+      border-radius: 36px;
+      background:
+        radial-gradient(circle at top right, rgba(255, 255, 255, 0.7), transparent 30%),
+        linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    .cta-box h2 {
+      max-width: 760px;
+      color: #fff;
+    }
+
+    .cta-box p {
+      max-width: 720px;
+      margin-bottom: 26px;
+      color: rgba(255, 255, 255, 0.86);
+      font-size: 18px;
+    }
+
+    .cta-box .btn {
+      background: #fff;
+      color: var(--primary-dark);
+      box-shadow: 0 16px 38px rgba(0, 0, 0, 0.13);
+    }
+
+    footer {
+      padding: 28px 0;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.52);
+      text-align: center;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 940px) {
+      .nav-links,
+      .nav-cta {
+        display: none;
+      }
+
+      .menu-btn {
+        display: inline-grid;
+        place-items: center;
+      }
+
+      .nav-links.open {
+        position: absolute;
+        top: 76px;
+        left: 20px;
+        right: 20px;
+        display: grid;
+        gap: 8px;
+        padding: 18px;
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        background: #fff;
+        box-shadow: var(--shadow);
+      }
+
+      .nav-links.open a {
+        padding: 10px;
+      }
+
+      .hero-grid,
+      .split,
+      .privacy-wrap {
+        grid-template-columns: 1fr;
+      }
+
+      .phone-wrap {
+        min-height: auto;
+      }
+
+      .features-grid,
+      .use-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        width: min(100% - 28px, 1180px);
+      }
+
+      .hero {
+        padding-top: 54px;
+      }
+
+      .features-grid,
+      .use-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .phone {
+        width: min(320px, 92vw);
+        min-height: 610px;
+      }
+
+      .phone-screen {
+        min-height: 580px;
+      }
+
+      .cta-box {
+        padding: 34px;
+        border-radius: 28px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <div class="container nav-inner">
+      <a class="brand" href="#top" aria-label="DM For WhatsApp home">
+        <span class="brand-icon" aria-hidden="true">💬</span>
+        <span>DM For WhatsApp</span>
+      </a>
+
+      <nav class="nav-links" id="navLinks" aria-label="Main navigation">
+        <a href="#features">Features</a>
+        <a href="#templates">Templates</a>
+        <a href="#privacy">Privacy</a>
+        <a href="#perfect-for">Perfect For</a>
+      </nav>
+      <button class="menu-btn" id="menuBtn" type="button" aria-label="Open menu">☰</button>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-content reveal">
+          <div class="eyebrow">Fast WhatsApp messaging</div>
+          <h1>Message anyone <span>without saving contacts</span></h1>
+          <p class="hero-copy">
+            DM For WhatsApp lets you send WhatsApp messages to any phone number without saving it first.
+            Enter a number, write your message, and open WhatsApp with the conversation ready to go.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn secondary" href="#features">Explore Features</a>
+          </div>
+
+          <div class="trust-row" aria-label="Key highlights">
+            <span>23 ready templates</span>
+            <span>7 categories</span>
+            <span>Local-first privacy</span>
+            <span>WhatsApp Business support</span>
+          </div>
+        </div>
+
+        <div class="phone-wrap reveal" aria-hidden="true">
+          <div class="blob"></div>
+          <div class="phone">
+            <div class="phone-screen">
+              <div class="dynamic-island"></div>
+              <div class="app-ui">
+                <div class="ui-label">Phone Number</div>
+                <div class="ui-row">
+                  <div class="ui-input">🇹🇷 +90</div>
+                  <div class="ui-input">☎ 5XX XXX XX XX</div>
+                </div>
+                <div class="ui-actions">
+                  <div class="ui-button">📋 Paste</div>
+                  <div class="ui-button">👤 Contacts</div>
+                </div>
+                <div class="ui-label">Message</div>
+                <div class="ui-message">Hi {name}, your order has been delivered.</div>
+                <div class="ui-template">
+                  <span>▣ Select Template</span>
+                  <span>42</span>
+                </div>
+                <div class="ui-send">Open WhatsApp ➤</div>
+              </div>
+              <div class="tabbar">
+                <span class="active">Message</span>
+                <span>Contacts</span>
+                <span>Templates</span>
+                <span>History</span>
+                <span>Settings</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features">
+      <div class="container">
+        <div class="section-head center reveal">
+          <h2>Everything you need to <span>message faster</span></h2>
+          <p>Built for quick outreach, business replies, customer support, delivery updates, and everyday WhatsApp conversations.</p>
+        </div>
+
+        <div class="features-grid">
+          <article class="feature-card reveal">
+            <span class="icon" aria-hidden="true">↗</span>
+            <h3>Send Without Saving</h3>
+            <p>Enter a phone number, type your message, and open WhatsApp directly. Keep your phonebook clean from one-time numbers.</p>
+          </article>
+
+          <article class="feature-card reveal">
+            <span class="icon" aria-hidden="true">🌍</span>
+            <h3>Country Codes</h3>
+            <p>Select from a wide range of country codes and message people around the world without extra steps.</p>
+          </article>
+
+          <article class="feature-card reveal">
+            <span class="icon" aria-hidden="true">💼</span>
+            <h3>WhatsApp Business</h3>
+            <p>Switch between regular WhatsApp and WhatsApp Business with a single tap for professional communication.</p>
+          </article>
+
+          <article class="feature-card reveal">
+            <span class="icon" aria-hidden="true">🧩</span>
+            <h3>Dynamic Variables</h3>
+            <p>Use placeholders like {name}, {product}, or {date}. Fill them before sending so every message feels personal.</p>
+          </article>
+
+          <article class="feature-card reveal">
+            <span class="icon" aria-hidden="true">⭐</span>
+            <h3>Built-In Contacts</h3>
+            <p>Save frequently messaged numbers inside the app with names, notes, tags, favorites, and instant search.</p>
+          </article>
+
+          <article class="feature-card reveal">
+            <span class="icon" aria-hidden="true">🕒</span>
+            <h3>Message History</h3>
+            <p>Review sent messages with phone number, preview, timestamp, and template information. Turn history off anytime.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="templates">
+      <div class="container split">
+        <div class="section-head reveal">
+          <h2>Powerful <span>message templates</span></h2>
+          <p>
+            Stop typing the same messages over and over. Create reusable templates for greetings,
+            sales pitches, appointment reminders, delivery updates, support responses, marketplace replies, and more.
+          </p>
+        </div>
+
+        <div class="template-demo reveal" aria-label="Template examples">
+          <div class="template-list">
+            <div class="template-item">
+              <div>
+                <strong>Appointment Reminder</strong>
+                <small>Hi {name}, you have an appointment tomorrow at {time}.</small>
+              </div>
+              <span class="pill">Appointment</span>
+            </div>
+            <div class="template-item">
+              <div>
+                <strong>Delivery Update</strong>
+                <small>Dear {name}, your order has been delivered.</small>
+              </div>
+              <span class="pill">Delivery</span>
+            </div>
+            <div class="template-item">
+              <div>
+                <strong>Marketplace Reply</strong>
+                <small>Hi, is {product} still available?</small>
+              </div>
+              <span class="pill">Marketplace</span>
+            </div>
+            <div class="template-item">
+              <div>
+                <strong>Support Response</strong>
+                <small>Hello {name}, how can I help you?</small>
+              </div>
+              <span class="pill">Support</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="privacy">
+      <div class="container">
+        <div class="section-head center reveal">
+          <h2>Private, customizable, and <span>local-first</span></h2>
+          <p>Your contacts, templates, message history, and settings stay on your device.</p>
+        </div>
+
+        <div class="privacy-wrap">
+          <article class="privacy-card featured reveal">
+            <span class="icon" aria-hidden="true">🔒</span>
+            <h3>Privacy First</h3>
+            <p>
+              Nothing is uploaded to external servers. Your conversations and contact information remain private,
+              and message history can be disabled in settings whenever you prefer.
+            </p>
+          </article>
+
+          <article class="privacy-card reveal">
+            <h3>Beautiful Customization</h3>
+            <p>Choose light, dark, or system theme. Pick your preferred primary and secondary colors.</p>
+          </article>
+
+          <article class="privacy-card reveal">
+            <h3>Multi-Language Support</h3>
+            <p>Use the app in English, Turkish, German, and Arabic with full interface translations.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="perfect-for">
+      <div class="container">
+        <div class="section-head center reveal">
+          <h2>Perfect for <span>everyday messaging</span></h2>
+          <p>DM For WhatsApp is useful whenever you need a fast WhatsApp conversation without saving the number.</p>
+        </div>
+
+        <div class="use-grid">
+          <article class="use-card reveal">
+            <span class="icon" aria-hidden="true">🏪</span>
+            <h3>Business owners</h3>
+            <p>Contact customers, leads, suppliers, and service partners quickly.</p>
+          </article>
+          <article class="use-card reveal">
+            <span class="icon" aria-hidden="true">🛒</span>
+            <h3>Online sellers</h3>
+            <p>Reply to marketplace buyers and product inquiries without cluttering contacts.</p>
+          </article>
+          <article class="use-card reveal">
+            <span class="icon" aria-hidden="true">💬</span>
+            <h3>Support teams</h3>
+            <p>Send quick, reusable responses for common customer questions.</p>
+          </article>
+          <article class="use-card reveal">
+            <span class="icon" aria-hidden="true">🚚</span>
+            <h3>Delivery services</h3>
+            <p>Notify recipients with prepared delivery and status update messages.</p>
+          </article>
+          <article class="use-card reveal">
+            <span class="icon" aria-hidden="true">🧑‍💻</span>
+            <h3>Freelancers</h3>
+            <p>Communicate with clients using professional templates and message history.</p>
+          </article>
+          <article class="use-card reveal">
+            <span class="icon" aria-hidden="true">⚡</span>
+            <h3>Anyone</h3>
+            <p>Message numbers found online, in ads, or in one-time situations in seconds.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      © <span id="year"></span> DM For WhatsApp. All rights reserved.
+    </div>
+  </footer>
+
+  <script>
+    const menuBtn = document.querySelector("#menuBtn");
+    const navLinks = document.querySelector("#navLinks");
+
+    menuBtn.addEventListener("click", () => {
+      navLinks.classList.toggle("open");
+      menuBtn.textContent = navLinks.classList.contains("open") ? "×" : "☰";
+    });
+
+    navLinks.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        navLinks.classList.remove("open");
+        menuBtn.textContent = "☰";
+      });
+    });
+
+    document.querySelector("#year").textContent = new Date().getFullYear();
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll(".reveal").forEach((element) => observer.observe(element));
+  </script>
+</body>
+</html>
